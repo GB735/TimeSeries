@@ -28,16 +28,22 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
+    df_bar = df
+    df_bar['Years'] = df_bar['date'].dt.year
+    df_bar['month'] = df_bar['date'].dt.month
+    df_bar['Months'] = df_bar['date'].dt.strftime('%B')
 
+    monthly_avg = df_bar.groupby(['Years', 'Months'])['value'].mean().reset_index()
     # Draw bar plot
 
 
-
-
-
+    print(monthly_avg)
+    plt.clf()
+    plt.figure(figsize=(7, 5)) 
+    fig = sns.barplot(data=monthly_avg,x='Years',y='value',hue='Months',palette='rainbow',hue_order=['January','February','March','April','May','June','July','August','September','October','November','December'])
+    plt.ylabel('Average Page Views')
     # Save image and return fig (don't change this part)
-    fig.savefig('bar_plot.png')
+    plt.savefig('bar_plot.png')
     return fig
 
 def draw_box_plot():
